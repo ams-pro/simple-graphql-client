@@ -38,8 +38,10 @@ class GraphQLClient:
             'variables': variables
         }
 
-        # Todo build file map dynamic
-        _map = {'1': ['variables.file.0']}
+        # Todo build file map more dynamic
+        _map = {}
+        for file, i in zip(files, range(len(files))):
+            _map[file[0]] = ['variables.file.{}'.format(i)]
 
         payload = {
             'operations': json.dumps(_operations),
