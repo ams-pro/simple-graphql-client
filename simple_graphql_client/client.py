@@ -28,16 +28,12 @@ class GraphQLClient:
         response_json = self._make_request(query=query, headers=headers, json=_json)
         return response_json
 
-    def query_with_files(self, query: str, variables: dict = None, headers: dict = None, files: dict = None):
-        if files is None:
-            files = {}
-        if variables is None:
-            variables = {}
+    def query_with_files(self, query: str, variables: dict, files: list, headers: dict = None):
         if headers is None:
             headers = self._HEADERS
 
         _operations = {
-            'operationName': None,  # todo get operations name dynamic
+            'operationName': None,  # todo get operationName dynamic
             'query': query,
             'variables': variables
         }
@@ -54,7 +50,7 @@ class GraphQLClient:
         return response_json
 
     def _make_request(self, query: str, headers: dict = None, payload: dict = None, json: dict = None,
-                      files: dict = None):
+                      files: list = None):
         request = requests.post(self._BASE_URL, headers=headers, data=payload, files=files, json=json)
         if request.status_code == 200:
             if 'errors' in request.json().keys():
