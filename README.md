@@ -2,7 +2,8 @@
 ## Installation
 The client is available on PyPI:
 * ``$ pip install simple-graphql-client``
-## Usage
+## Examples
+### Executing a query
 ```python
 from simple_graphql_client import GraphQLClient
 
@@ -17,7 +18,7 @@ variables = {
 }
 data = client.query(query=query, variables=variables)
 ```
-
+### Executing a query with a file
 ```python
 from simple_graphql_client import GraphQLClient
 
@@ -36,5 +37,11 @@ with open(filename, "rb") as file:
         ('1', (filename, file, 'application/pdf'))
     ]
 
-    response = client.query_with_files(query=query, variables=variables, files=files, headers=headers)
+    response = client.query_with_files(query=query, variables=variables, files=files)
+```
+### Setting a query-specific header
+This argument will override the default header which can be set in the `GraphQLClient`
+```python
+response = client.query(query=query, variables=variables, files=files, headers=headers)
+response = client.query_with_files(query=query, variables=variables, files=files, headers=headers)
 ```
