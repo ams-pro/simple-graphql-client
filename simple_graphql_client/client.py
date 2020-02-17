@@ -34,24 +34,16 @@ class GraphQLClient:
         if headers is None:
             headers = self._HEADERS
 
-        _operations = {
-            'operationName': None,  # todo get operationName dynamic
-            'query': query,
-            'variables': variables
-        }
+        upload_fields, operation_name = self._get_upload_fields(query)
 
         # Todo build file map more dynamic
         _map = {}
 
-        upload_fields = self._get_upload_fields(query)
-
         for (field_name, is_list) in upload_fields:
-            print(field_name, is_list)
-
             if is_list:
 
                 assert len(variables[field_name]) == len(files), \
-                    "Not enough values for either 'files' or 'files' in variables"
+                    "Not enough values for either '{}' or '{}' in variables".format(field_name, field_name)
 
                 for file, i in zip(files, range(len(files))):
                     # validate variables
@@ -64,7 +56,12 @@ class GraphQLClient:
                 files = [files]
                 _map["0"] = ['variables.{}'.format(field_name)]
 
-        print(_map)
+        _operations = {
+            'operationName': operation_name,
+            'query': query,
+            'variables': variables
+        }
+
         payload = {
             'operations': json.dumps(_operations),
             'map': json.dumps(_map)
@@ -97,7 +94,9 @@ class GraphQLClient:
                 upload_fields.append((variable_name, is_list))
             else:
                 continue
-        return upload_fields
+
+        operation_name = parsed.definitions[0].name.value
+        return upload_fields, operation_name
 
     def _make_request(self, query: str, headers: dict = None, payload: dict = None, json: dict = None,
                       files: list = None):
