@@ -4,10 +4,6 @@ import requests
 from graphql import parse
 from graphql.language.ast import ListType
 
-SUBDIR = None
-GRAPHQL_FILE_PATH = ''
-HEADERS = {}
-
 
 class GraphQLClient:
     _BASE_URL = None
