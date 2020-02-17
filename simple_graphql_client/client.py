@@ -32,7 +32,6 @@ class GraphQLClient:
 
         upload_fields, operation_name = self._get_upload_fields(query)
 
-        # Todo build file map more dynamic
         _map = {}
 
         for (field_name, is_list) in upload_fields:
@@ -50,7 +49,7 @@ class GraphQLClient:
                 # validate variables
                 assert variables[field_name] is None, "No null value for {}".format(field_name)
                 files = [files]
-                _map["0"] = ['variables.{}'.format(field_name)]
+                _map[field_name] = ['variables.{}'.format(field_name)]
 
         _operations = {
             'operationName': operation_name,
