@@ -19,6 +19,7 @@ variables = {
 data = client.query(query=query, variables=variables)
 ```
 ### Executing a query with a single file
+Note: For information visit: https://github.com/jaydenseric/graphql-multipart-request-spec
 ```python
 from simple_graphql_client import GraphQLClient
 
