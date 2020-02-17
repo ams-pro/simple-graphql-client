@@ -18,7 +18,7 @@ variables = {
 }
 data = client.query(query=query, variables=variables)
 ```
-### Executing a query with a file
+### Executing a query with a single file
 ```python
 from simple_graphql_client import GraphQLClient
 
@@ -30,14 +30,37 @@ query = "..."
 filename = "..."
 variables = {
     ...
+    'file': None,
+    ...
 }
 
 with open(filename, "rb") as file:
     files = [
-        ('1', (filename, file, 'application/pdf'))
+        ('file', (filename, file))
     ]
 
     response = client.query_with_files(query=query, variables=variables, files=files)
+```
+### Executing a query with a multiple files
+```python
+from simple_graphql_client import GraphQLClient
+
+client = GraphQLClient("https://...")
+
+query = "..."
+filenames = ["...", "..."]
+files = []
+variables = {
+    ...
+    'files': [None, None]
+    ... 
+}
+
+for i, filename in enumerate(filenames):
+    variable = 'files.{}'.format(i)
+    files.append((variable, (filename, open(filename, "rb"))))
+
+response = client.query_with_files(query=query, variables=variables, files=files)
 ```
 ### Setting a query-specific header
 This argument will override the default header which can be set in the `GraphQLClient`
