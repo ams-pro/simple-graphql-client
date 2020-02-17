@@ -45,7 +45,7 @@ class GraphQLClient:
                 assert len(variables[field_name]) == len(files), \
                     "Not enough values for either '{}' or '{}' in variables".format(field_name, field_name)
 
-                for file, i in zip(files, range(len(files))):
+                for i, file in enumerate(files):
                     # validate variables
                     assert variables[field_name][i] is None, "No null value for {} at index {}".format(field_name, i)
 
@@ -70,7 +70,8 @@ class GraphQLClient:
         response_json = self._make_request(query=query, payload=payload, headers=headers, files=files)
         return response_json
 
-    def _get_upload_fields(self, query):
+    @staticmethod
+    def _get_upload_fields(query):
 
         upload_fields = []
 
