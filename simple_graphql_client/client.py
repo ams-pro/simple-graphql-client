@@ -5,6 +5,14 @@ from graphql import parse
 from graphql.language.ast import ListType
 
 
+class BadRequest(Exception):
+    pass
+
+
+class InternalServerError(Exception):
+    pass
+
+
 class GraphQLClient:
     _BASE_URL = None
     _HEADERS = {}
@@ -99,10 +107,11 @@ class GraphQLClient:
         request = requests.post(self._BASE_URL, headers=headers, data=payload, files=files, json=json)
         if request.status_code == 200:
             if 'errors' in request.json().keys():
-                raise Exception("[ERROR] Bad Request: {}. \n {}".format(request.json()['errors'], query))
+                raise BadRequest("[ERROR] Bad Request: {}. \n {}".format(request.json()['errors'], query))
             return request.json()
         else:
             if 400 <= request.status_code < 500:
-                raise Exception("[ERROR] Bad Request: {}. \n {}".format(request.content, query))
+                raise BadRequest("[ERROR] Bad Request: {}. \n {}".format(request.content, query))
             else:
-                raise Exception("[ERROR] failed to run by returning error of {}. {}".format(request.status_code, query))
+                raise InternalServerError(
+                    "[ERROR] failed to run by returning error of {}. {}".format(request.status_code, query))
