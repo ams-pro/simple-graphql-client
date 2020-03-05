@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="simple-graphql-client",
-    version="0.0.2",
+    version="0.0.3",
     author="Fabian Riewe",
     author_email="f.riewe@ams-pro.de",
     description="A simple graphql client which also supports file upload",
